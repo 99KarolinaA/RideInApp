@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController textEditingController;
@@ -22,7 +23,7 @@ class CustomTextField extends StatelessWidget {
     //todo: change colors
     return Container(
       //todo: change maybe width?
-    width: _width * 0.5,
+      width: Platform.isAndroid || Platform.isIOS ? _width : _width * 0.5,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10)),

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:icar/startPage.dart';
 import '../Dialogs/errorDialog.dart';
@@ -117,7 +118,7 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  void saveUserData(){
+  void saveUserData() async{
     Map<String, dynamic> userData={
       'userName': nameController.text.trim(),
       'uId': userId,
@@ -126,6 +127,7 @@ class _RegisterState extends State<Register> {
       'time': DateTime.now(),
     };
 
+    await Firebase.initializeApp();
     FirebaseFirestore.instance.collection('users').doc(userId).set(userData);
 
   }

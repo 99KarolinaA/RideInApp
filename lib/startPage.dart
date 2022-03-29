@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:icar/authentication/appAuthentication.dart';
+import 'package:icar/homepage.dart';
+import 'dart:io' show Platform;
 
 class StartPage extends StatefulWidget {
   const StartPage({key}) : super(key: key);
@@ -13,9 +17,18 @@ class StartPage extends StatefulWidget {
 class _StartPageState extends State<StartPage> {
   startTimer() {
     Timer(Duration(seconds: 3), () async {
-      Route route =
-          MaterialPageRoute(builder: (context) => AppAuthentication());
-      Navigator.pushReplacement(context, route);
+      await Firebase.initializeApp();
+      if(FirebaseAuth.instance.currentUser!=null){
+        Route route =
+        MaterialPageRoute(builder: (context) => Homepage());
+        Navigator.pushReplacement(context, route);
+      }
+      else {
+        Route route =
+        MaterialPageRoute(builder: (context) => AppAuthentication());
+        Navigator.pushReplacement(context, route);
+      }
+
     });
   }
 
@@ -42,13 +55,17 @@ class _StartPageState extends State<StartPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // todo: change the logo and the text
-                Image.asset('images/logo.png'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset('images/logo.png'),
+                ),
                 SizedBox(
                   height: 20.0,
                 ),
                 Text("Ride in and enjoy",
                     style: TextStyle(
-                        fontSize: 60.0,
+                        fontSize: Platform.isAndroid || Platform.isIOS?
+                        20.0: 60.0,
                         color: Colors.white,
                         fontFamily: "Lobster"))
               ],
