@@ -1,8 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:icar/profilePage.dart';
+import 'package:icar/searchCar.dart';
 import 'package:timeago/timeago.dart' as tAgo;
+import 'dart:io' show Platform;
 
+import 'authentication/appAuthentication.dart';
 import 'functions.dart';
 import 'globalVariables.dart';
 
@@ -143,7 +148,122 @@ class _HomepageState extends State<Homepage> {
         });
   }
 
-  getMyData() {
+  Future<bool> showDialogForUpdateData(selectedDoc) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "Update the ad",
+              style: TextStyle(
+                  fontSize: 24, fontFamily: "Bebas", letterSpacing: 2.0),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(hintText: 'Enter your name'),
+                  onChanged: (value) {
+                    this.userName = value;
+                  },
+                ),
+                SizedBox(height: 5.0),
+                TextField(
+                  decoration:
+                      InputDecoration(hintText: 'Enter your phone number'),
+                  onChanged: (value) {
+                    this.userNumber = value;
+                  },
+                ),
+                SizedBox(height: 5.0),
+                TextField(
+                  decoration: InputDecoration(hintText: 'Enter car price'),
+                  onChanged: (value) {
+                    this.carPrice = value;
+                  },
+                ),
+                SizedBox(height: 5.0),
+                TextField(
+                  decoration: InputDecoration(hintText: 'Enter car name'),
+                  onChanged: (value) {
+                    this.carModel = value;
+                  },
+                ),
+                SizedBox(height: 5.0),
+                TextField(
+                  decoration: InputDecoration(hintText: 'Enter car color'),
+                  onChanged: (value) {
+                    this.carColor = value;
+                  },
+                ),
+                SizedBox(height: 5.0),
+                TextField(
+                  decoration: InputDecoration(hintText: 'Enter car location'),
+                  onChanged: (value) {
+                    this.carLocation = value;
+                  },
+                ),
+                SizedBox(height: 5.0),
+                TextField(
+                  decoration:
+                      InputDecoration(hintText: 'Enter car description'),
+                  onChanged: (value) {
+                    this.description = value;
+                  },
+                ),
+                SizedBox(height: 5.0),
+                TextField(
+                  decoration: InputDecoration(hintText: 'Enter image URL'),
+                  onChanged: (value) {
+                    this.urlImage = value;
+                  },
+                ),
+                SizedBox(height: 5.0),
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                child: Text(
+                  "Cancel",
+                ),
+                onPressed: () {
+                  Navigator.pop(context); //close the alert box
+                },
+              ),
+              ElevatedButton(
+                child: Text(
+                  "Update now",
+                ),
+                onPressed: () {
+                  Navigator.pop(context); //close the alert box
+                  Map<String, dynamic> carData = {
+                    'userName': this.userName,
+                    'userNumber': this.userNumber,
+                    'carPrice': this.carPrice,
+                    'carModel': this.carModel,
+                    'carColor': this.carColor,
+                    'carLocation': this.carLocation,
+                    'description': this.description,
+                    'urlImage': this.urlImage,
+                    'time': DateTime.now(),
+                  };
+                  carObject.updateData(selectedDoc, carData).then((value){
+                    print("Data updated successfully.");
+                    Route route = MaterialPageRoute(builder: (BuildContext c) => Homepage());
+                    Navigator.push(context, route);
+                  }).catchError((onError){
+                    print(onError);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  getMyData() async{
+    await Firebase.initializeApp();
     FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -174,6 +294,8 @@ class _HomepageState extends State<Homepage> {
   //todo: change icons, colors, paddings
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     // todo: change the listing of the cars
     Widget showCarsList() {
       if (cars != null) {
@@ -187,7 +309,10 @@ class _HomepageState extends State<Homepage> {
                   children: [
                     ListTile(
                       leading: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Route route = MaterialPageRoute(builder: (_)=>ProfilePage(sellerId: cars.docs[i].data()['uId'],));
+                          Navigator.pushReplacement(context, route);
+                        },
                         child: Container(
                           width: 60,
                           height: 60,
@@ -202,17 +327,26 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
                       title: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Route route = MaterialPageRoute(builder: (_)=>ProfilePage(sellerId: cars.docs[i].data()['uId'],));
+                            Navigator.pushReplacement(context, route);
+                          },
                           child: Text(cars.docs[i].data()['userName'])),
                       subtitle: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Route route = MaterialPageRoute(builder: (_)=>ProfilePage(sellerId: cars.docs[i].data()['uId'],));
+                          Navigator.pushReplacement(context, route);
+                        },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              cars.docs[i].data()['carLocation'],
-                              style: TextStyle(
-                                  color: Colors.black.withOpacity(0.6)),
+                            Expanded(
+                              child: Text(
+                                cars.docs[i].data()['carLocation'],
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(0.6)),
+                              ),
                             ),
                             SizedBox(
                               width: 4.0,
@@ -229,7 +363,11 @@ class _HomepageState extends State<Homepage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    if (cars.docs[i].data()['uId'] == userId) {
+                                      showDialogForUpdateData(cars.docs[i].id);
+                                    }
+                                  },
                                   child: Icon(
                                     Icons.edit_outlined,
                                   ),
@@ -238,7 +376,13 @@ class _HomepageState extends State<Homepage> {
                                   width: 20,
                                 ),
                                 GestureDetector(
-                                    onDoubleTap: () {},
+                                    onDoubleTap: () {
+                                      if(cars.docs[i].data()['uId'] == userId){
+                                        carObject.deleteData(cars.docs[i].id);
+                                        Route route = MaterialPageRoute(builder: (BuildContext c) => Homepage());
+                                        Navigator.push(context, route);
+                                      }
+                                    },
                                     child: Icon(Icons.delete_forever_sharp)),
                               ],
                             )
@@ -360,44 +504,61 @@ class _HomepageState extends State<Homepage> {
 
     return Scaffold(
       appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.refresh, color: Colors.white),
-            onPressed: () {},
+        leading: IconButton(
+          icon: Icon(Icons.refresh, color: Colors.white),
+          onPressed: () {
+            Route route = MaterialPageRoute(builder: (_) => Homepage());
+            Navigator.pushReplacement(context, route);
+          },
+        ),
+        actions: <Widget>[
+          TextButton(
+              onPressed: () {
+                Route route = MaterialPageRoute(builder: (_) => ProfilePage(sellerId: userId,));
+                Navigator.pushReplacement(context, route);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Icon(Icons.person, color: Colors.white),
+              )),
+          TextButton(
+              onPressed: () {
+                Route route = MaterialPageRoute(builder: (_) => SearchCar());
+                Navigator.pushReplacement(context, route);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Icon(Icons.search, color: Colors.white),
+              )),
+          TextButton(
+              onPressed: () {
+                auth.signOut().then((_) {
+                  Route route =
+                      MaterialPageRoute(builder: (_) => AppAuthentication());
+                  Navigator.pushReplacement(context, route);
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Icon(Icons.login_outlined, color: Colors.white),
+              ))
+        ],
+        flexibleSpace: Container(
+          decoration: new BoxDecoration(
+            gradient: new LinearGradient(
+                colors: [Colors.black54, Colors.teal],
+                begin: const FractionalOffset(0.0, 0.0),
+                end: const FractionalOffset(1.0, 0.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp),
           ),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Icon(Icons.person, color: Colors.white),
-                )),
-            TextButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Icon(Icons.search, color: Colors.white),
-                )),
-            TextButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Icon(Icons.login_outlined, color: Colors.white),
-                ))
-          ],
-          flexibleSpace: Container(
-            decoration: new BoxDecoration(
-              gradient: new LinearGradient(
-                // todo: change the colors
-                  colors: [Colors.cyanAccent, Colors.cyan, Colors.indigo, Colors.deepPurple],
-                  begin: const FractionalOffset(0.0, 0.0),
-                  end: const FractionalOffset(1.0, 0.0),
-                  stops: [0.0, 0.2,0.7, 1.0],
-                  tileMode: TileMode.clamp),
-            ),
-          ),
-          title: Text(("Home page"))),
+        ),
+        title: Text(("Home page")),
+        centerTitle: Platform.isAndroid || Platform.isIOS ? false : true,
+      ),
       body: Center(
           child: Container(
+        width: Platform.isAndroid || Platform.isIOS ? width: width * 0.5,
         child: showCarsList(),
       )),
       floatingActionButton: FloatingActionButton(

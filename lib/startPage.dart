@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:icar/authentication/appAuthentication.dart';
 import './customWidgets/gradientText.dart';
+import 'package:icar/homepage.dart';
+import 'dart:io' show Platform;
 
 class StartPage extends StatefulWidget {
   const StartPage({key}) : super(key: key);
@@ -14,9 +18,18 @@ class StartPage extends StatefulWidget {
 class _StartPageState extends State<StartPage> {
   startTimer() {
     Timer(Duration(seconds: 3), () async {
-      Route route =
-          MaterialPageRoute(builder: (context) => AppAuthentication());
-      Navigator.pushReplacement(context, route);
+      await Firebase.initializeApp();
+      if(FirebaseAuth.instance.currentUser!=null){
+        Route route =
+        MaterialPageRoute(builder: (context) => Homepage());
+        Navigator.pushReplacement(context, route);
+      }
+      else {
+        Route route =
+        MaterialPageRoute(builder: (context) => AppAuthentication());
+        Navigator.pushReplacement(context, route);
+      }
+
     });
   }
 

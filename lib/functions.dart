@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class carMethods {
-  bool isLoggedIn() {
+  Future<bool> isLoggedIn() async {
+    await Firebase.initializeApp();
     if (FirebaseAuth.instance.currentUser != null) {
       return true;
     } else {
@@ -11,7 +13,8 @@ class carMethods {
   }
 
   Future<void> addData(carData) async {
-    if (isLoggedIn()) {
+    await Firebase.initializeApp();
+    if (isLoggedIn() != null) {
       FirebaseFirestore.instance
           .collection('cars')
           .add(carData)
@@ -24,14 +27,16 @@ class carMethods {
   }
 
   getData() async {
+    await Firebase.initializeApp();
     return await FirebaseFirestore.instance
         .collection('cars')
         .orderBy("time", descending: true)
         .get();
   }
 
-  updateData(selectedDoc, newValue) {
-    FirebaseFirestore.instance
+  updateData(selectedDoc, newValue) async {
+    await Firebase.initializeApp();
+    return await FirebaseFirestore.instance
         .collection('cars')
         .doc(selectedDoc)
         .update(newValue)
@@ -40,7 +45,8 @@ class carMethods {
     });
   }
 
-  deleteData(docId) {
+  deleteData(docId) async{
+    await Firebase.initializeApp();
     FirebaseFirestore.instance
         .collection('cars')
         .doc(docId)
