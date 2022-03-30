@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:icar/authentication/appAuthentication.dart';
+import './customWidgets/gradientText.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({key}) : super(key: key);
@@ -27,31 +28,35 @@ class _StartPageState extends State<StartPage> {
  //todo: below
   @override
   Widget build(BuildContext context) {
-    return Material(
-        child: Container(
-            decoration: new BoxDecoration(
-                gradient: new LinearGradient(
-                    // todo: change the colors
-                    colors: [Colors.white, Colors.teal],
-                    begin: const FractionalOffset(0.0, 0.0),
-                    end: const FractionalOffset(1.0, 0.0),
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp)),
-            child: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return new Stack(
+
               children: <Widget>[
                 // todo: change the logo and the text
-                Image.asset('images/logo.png'),
-                SizedBox(
-                  height: 20.0,
+                Positioned.fill(  //
+                  child: Image(
+                    image: AssetImage('../../images/background_lights.jpg'),
+                    fit : BoxFit.fill,
+                  ),
                 ),
-                Text("Ride in and enjoy",
-                    style: TextStyle(
-                        fontSize: 60.0,
-                        color: Colors.white,
-                        fontFamily: "Lobster"))
+                Container(
+                  padding: new EdgeInsets.only(top: 100.0),
+                        child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                GradientText(
+                                  'Ride in and enjoy',
+                                  style: const TextStyle(
+                                    fontSize: 60,
+                                    fontFamily: "Lobster",),
+                                  gradient: LinearGradient(colors: [
+                                    Colors.cyanAccent, Colors.cyan, Colors.indigo, Colors.deepPurple
+                                  ]),
+                                ),
+
+                              ],
+                            )))
               ],
-            ))));
+            );
   }
 }
