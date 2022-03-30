@@ -4,6 +4,7 @@ import 'package:icar/Dialogs/errorDialog.dart';
 import 'package:icar/Dialogs/loadingDialog.dart';
 import 'package:icar/homepage.dart';
 
+import '../bloc.dart';
 import '../customWidgets/customTextField.dart';
 
 class Login extends StatefulWidget {
@@ -18,6 +19,7 @@ class _LoginState extends State<Login> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final bloc = Bloc();
 
   @override
   Widget build(BuildContext context) {
@@ -26,72 +28,97 @@ class _LoginState extends State<Login> {
     double _height = MediaQuery.of(context).size.height;
 
     // todo: change padding and image and iconData
-    return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Image.asset(
-                  'images/login.png',
-                  // already changed a little
-                  height: 250.0,
-                ),
-              ),
-            ),
-            Form(
-              key: globalKey,
-              child: Column(
-                children: <Widget>[
-                  CustomTextField(
-                    iconData: Icons.person,
-                    textEditingController: emailController,
-                    hint: 'Email',
-                    isObscure: false,
+    return new SingleChildScrollView(
+        child:
+          Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 180.0)
+
                   ),
-                  CustomTextField(
-                    iconData: Icons.lock,
-                    textEditingController: passwordController,
-                    hint: 'Password',
-                    isObscure: true,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              //todo: change maybe width and color?
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: ElevatedButton(
-                onPressed: () {
-                  emailController.text.isNotEmpty && passwordController.text.isNotEmpty
-                      ? _login()
-                      : showDialog(
-                      context: context,
-                      builder: (con){
-                        return ErrorDialog(
-                          errorMessage: 'Please write the required info.',
-                        );
-                      });
-                },
-                child: Text(
-                  'Log in',
-                  style: TextStyle(color: Colors.white),
                 ),
-              ),
+                Form(
+                  key: globalKey,
+                  child: Column(
+                    children: <Widget>[
+                      Container(height: _height * 0.1,
+                      child: StreamBuilder<String>(
+                        stream: bloc.email,
+                        builder: (context, snapshot) => CustomTextField(
+                          iconData: Icons.person,
+                          textEditingController: emailController,
+                          hint: 'Email',
+                          isObscure: false,
+                          function: bloc.emailChanged,
+                          errorText: snapshot.error
+                        ),
+                      ),
+                      ),
+                      Container(
+                        height: _height * 0.1,
+                        child: StreamBuilder<String>(
+                          stream: bloc.password,
+                          builder: (context, snapshot) => CustomTextField(
+                          iconData: Icons.lock,
+                          textEditingController: passwordController,
+                          hint: 'Password',
+                          isObscure: true,
+                          function: bloc.passwordChanged,
+                          errorText: snapshot.error
+                        )
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height:   10,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Container(
+                    child: StreamBuilder<bool>(
+                      stream: bloc.submitCheck,
+                      builder: (context, snapshot) => ElevatedButton(
+                          onPressed: () {
+                            /*emailController.text.isNotEmpty && passwordController.text.isNotEmpty
+                                ? _login()
+                                : showDialog(
+                                context: context,
+                                builder: (con){
+                                  return ErrorDialog(
+                                    errorMessage: 'Please write the required info.',
+                                  );
+                                });*/
+                            snapshot.hasData? _login() : showDialog(
+                                context: context,
+                                builder: (con){
+                                  return ErrorDialog(
+                                    errorMessage: 'Please write the required info.',
+                                  );
+                                });
+                          },
+                          child: Container(
+                            padding: new EdgeInsets.all(15.0),
+                            child: Text(
+                              'Log in',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )
+                      ),
+                    ),
+                  )
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+              ],
             ),
-            SizedBox(
-              height: 50,
-            ),
-          ],
-        ),
-      ),
-    );
+          ));
   }
 
   void _login() async {

@@ -21,10 +21,10 @@ class _AppAuthenticationState extends State<AppAuthentication> {
             decoration: new BoxDecoration(
                 gradient: new LinearGradient(
                     // todo: change the colors
-                    colors: [Colors.teal, Colors.black],
+                    colors: [Colors.cyanAccent, Colors.cyan, Colors.indigo, Colors.deepPurple],
                     begin: const FractionalOffset(0.0, 0.0),
                     end: const FractionalOffset(1.0, 0.0),
-                    stops: [0.0, 1.0],
+                    stops: [0.0, 0.2,0.7, 1.0],
                     tileMode: TileMode.clamp)),
           ),
           title: Text(
@@ -46,17 +46,18 @@ class _AppAuthenticationState extends State<AppAuthentication> {
           ),
         ),
         body: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                // todo: change the colors
-                colors: [Colors.teal, Colors.black54],
+
+            child: Stack(children: <Widget>[
+              Positioned.fill(  //
+                child: Image(
+                  image: AssetImage('../../images/background_lights.jpg'),
+                  fit : BoxFit.fill,
+                ),
               ),
-            ),
-            child: TabBarView(children: <Widget>[
-              Login(),
-              Register(),
+              TabBarView(children: <Widget>[
+                Login(),
+                Register(),
+              ]),
             ])),
       ),
     );

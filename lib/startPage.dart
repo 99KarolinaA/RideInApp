@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:icar/authentication/appAuthentication.dart';
+import './customWidgets/gradientText.dart';
 import 'package:icar/homepage.dart';
 import 'dart:io' show Platform;
 
@@ -48,34 +49,38 @@ class _StartPageState extends State<StartPage> {
     } catch (e) {
       fontSize = 60.0;
     }
-    return Material(
-        child: Container(
-            decoration: new BoxDecoration(
-                gradient: new LinearGradient(
-                    // todo: change the colors
-                    colors: [Colors.white, Colors.teal],
-                    begin: const FractionalOffset(0.0, 0.0),
-                    end: const FractionalOffset(1.0, 0.0),
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp)),
+    return new Stack(
+      children: <Widget>[
+        // todo: change the logo and the text
+        Positioned.fill(
+          //
+          child: Image(
+            image: AssetImage('../../images/background_lights.jpg'),
+            fit: BoxFit.fill,
+          ),
+        ),
+        Container(
+            padding: new EdgeInsets.only(top: 100.0),
             child: Center(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // todo: change the logo and the text
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset('images/logo.png'),
+                GradientText(
+                  'Ride in and enjoy',
+                  style: const TextStyle(
+                    fontSize: 60,
+                    fontFamily: "Lobster",
+                  ),
+                  gradient: LinearGradient(colors: [
+                    Colors.cyanAccent,
+                    Colors.cyan,
+                    Colors.indigo,
+                    Colors.deepPurple
+                  ]),
                 ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Text("Ride in and enjoy",
-                    style: TextStyle(
-                        fontSize: fontSize,
-                        color: Colors.white,
-                        fontFamily: "Lobster"))
               ],
-            ))));
+            )))
+      ],
+    );
   }
 }

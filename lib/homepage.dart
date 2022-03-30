@@ -15,7 +15,6 @@ import 'globalVariables.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key key}) : super(key: key);
-
   @override
   _HomepageState createState() => _HomepageState();
 }
@@ -81,18 +80,20 @@ class _HomepageState extends State<Homepage> {
             title: Text(
               "Post a new ad",
               style: TextStyle(
-                  fontSize: 24, fontFamily: "Bebas", letterSpacing: 2.0),
+                  fontSize: 20, fontFamily: "Bebas", letterSpacing: 2.0),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                TextField(
-                  decoration: InputDecoration(hintText: 'Enter your name'),
-                  onChanged: (value) {
-                    this.userName = value;
-                  },
+                Container(
+                  child: TextField(
+                    decoration: InputDecoration(hintText: 'Enter your name'),
+                    onChanged: (value) {
+                      this.userName = value;
+                    },
+                  ),
                 ),
-                SizedBox(height: 5.0),
+                SizedBox(height: 4.0),
                 TextField(
                   decoration:
                       InputDecoration(hintText: 'Enter your phone number'),
@@ -100,35 +101,35 @@ class _HomepageState extends State<Homepage> {
                     this.userNumber = value;
                   },
                 ),
-                SizedBox(height: 5.0),
+                SizedBox(height: 4.0),
                 TextField(
                   decoration: InputDecoration(hintText: 'Enter car price'),
                   onChanged: (value) {
                     this.carPrice = value;
                   },
                 ),
-                SizedBox(height: 5.0),
+                SizedBox(height: 4.0),
                 TextField(
                   decoration: InputDecoration(hintText: 'Enter car name'),
                   onChanged: (value) {
                     this.carModel = value;
                   },
                 ),
-                SizedBox(height: 5.0),
+                SizedBox(height: 4.0),
                 TextField(
                   decoration: InputDecoration(hintText: 'Enter car color'),
                   onChanged: (value) {
                     this.carColor = value;
                   },
                 ),
-                SizedBox(height: 5.0),
+                SizedBox(height: 4.0),
                 TextField(
                   decoration: InputDecoration(hintText: 'Enter car location'),
                   onChanged: (value) {
                     this.carLocation = value;
                   },
                 ),
-                SizedBox(height: 5.0),
+                SizedBox(height: 4.0),
                 TextField(
                   decoration:
                       InputDecoration(hintText: 'Enter car description'),
@@ -136,14 +137,14 @@ class _HomepageState extends State<Homepage> {
                     this.description = value;
                   },
                 ),
-                SizedBox(height: 5.0),
+                SizedBox(height: 4.0),
                 TextField(
                   decoration: InputDecoration(hintText: 'Enter image URL'),
                   onChanged: (value) {
                     this.urlImage = value;
                   },
                 ),
-                SizedBox(height: 5.0),
+                SizedBox(height: 4.0),
               ],
             ),
             actions: [
@@ -642,8 +643,21 @@ class _HomepageState extends State<Homepage> {
         child: showCarsList(),
       )),
       floatingActionButton: FloatingActionButton(
+        child: Container(
+          height: 60,
+          width: 60,
+          decoration: new BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: new LinearGradient(
+              colors: [Colors.cyanAccent, Colors.cyan, Colors.indigo, Colors.deepPurple],
+                  begin: const FractionalOffset(0.0, 0.0),
+                  end: const FractionalOffset(1.0, 0.0),
+                  stops: [0.0, 0.2,0.7, 1.0],
+                  tileMode: TileMode.clamp)),
+          child: Icon(Icons.add),
+        ),
         tooltip: 'Add post',
-        child: Icon(Icons.add),
+
         onPressed: () {
           showDialogForAddingData();
         },
