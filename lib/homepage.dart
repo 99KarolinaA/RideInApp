@@ -15,6 +15,7 @@ import 'globalVariables.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key key}) : super(key: key);
+
   @override
   _HomepageState createState() => _HomepageState();
 }
@@ -82,7 +83,8 @@ class _HomepageState extends State<Homepage> {
               style: TextStyle(
                   fontSize: 20, fontFamily: "Bebas", letterSpacing: 2.0),
             ),
-            content: Column(
+            content: SingleChildScrollView(
+                child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
@@ -146,7 +148,7 @@ class _HomepageState extends State<Homepage> {
                 ),
                 SizedBox(height: 4.0),
               ],
-            ),
+            )),
             actions: [
               ElevatedButton(
                   onPressed: () async {
@@ -168,15 +170,18 @@ class _HomepageState extends State<Homepage> {
                 ),
                 onPressed: () {
                   Map<String, dynamic> carData = {
-                    'userName': this.userName,
+                    'userName': this.userName != null ? this.userName : ' ',
                     'uId': userId,
-                    'userNumber': this.userNumber,
-                    'carPrice': this.carPrice,
-                    'carModel': this.carModel,
-                    'carColor': this.carColor,
-                    'carLocation': this.carLocation,
-                    'description': this.description,
-                    'urlImage': this.urlImage,
+                    'userNumber':
+                        this.userNumber != null ? this.userNumber : ' ',
+                    'carPrice': this.carPrice != null ? this.carPrice : ' ',
+                    'carModel': this.carModel != null ? this.carModel : ' ',
+                    'carColor': this.carColor != null ? this.carColor : ' ',
+                    'carLocation':
+                        this.carLocation != null ? this.carLocation : ' ',
+                    'description':
+                        this.description != null ? this.description : ' ',
+                    'urlImage': this.urlImage != null ? this.urlImage : ' ',
                     'imgPro': userImageUrl,
                     'time': DateTime.now(),
                   };
@@ -205,7 +210,8 @@ class _HomepageState extends State<Homepage> {
               style: TextStyle(
                   fontSize: 24, fontFamily: "Bebas", letterSpacing: 2.0),
             ),
-            content: Column(
+            content: SingleChildScrollView(
+                child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextField(
@@ -267,7 +273,7 @@ class _HomepageState extends State<Homepage> {
                 ),
                 SizedBox(height: 5.0),
               ],
-            ),
+            )),
             actions: [
               ElevatedButton(
                 child: Text(
@@ -284,14 +290,17 @@ class _HomepageState extends State<Homepage> {
                 onPressed: () {
                   Navigator.pop(context); //close the alert box
                   Map<String, dynamic> carData = {
-                    'userName': this.userName,
-                    'userNumber': this.userNumber,
-                    'carPrice': this.carPrice,
-                    'carModel': this.carModel,
-                    'carColor': this.carColor,
-                    'carLocation': this.carLocation,
-                    'description': this.description,
-                    'urlImage': this.urlImage,
+                    'userName': this.userName != null ? this.userName : ' ',
+                    'userNumber':
+                        this.userNumber != null ? this.userNumber : ' ',
+                    'carPrice': this.carPrice != null ? this.carPrice : ' ',
+                    'carModel': this.carModel != null ? this.carModel : ' ',
+                    'carColor': this.carColor != null ? this.carColor : ' ',
+                    'carLocation':
+                        this.carLocation != null ? this.carLocation : ' ',
+                    'description':
+                        this.description != null ? this.description : ' ',
+                    'urlImage': this.urlImage != null ? this.urlImage : ' ',
                     'time': DateTime.now(),
                   };
                   carObject.updateData(selectedDoc, carData).then((value) {
@@ -338,7 +347,6 @@ class _HomepageState extends State<Homepage> {
     getMyData();
   }
 
-  //todo: change icons, colors, paddings
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -362,7 +370,6 @@ class _HomepageState extends State<Homepage> {
       centertitle = true;
     }
 
-    // todo: change the listing of the cars
     Widget showCarsList() {
       if (cars != null) {
         return ListView.builder(
@@ -649,15 +656,19 @@ class _HomepageState extends State<Homepage> {
           decoration: new BoxDecoration(
               shape: BoxShape.circle,
               gradient: new LinearGradient(
-              colors: [Colors.cyanAccent, Colors.cyan, Colors.indigo, Colors.deepPurple],
+                  colors: [
+                    Colors.cyanAccent,
+                    Colors.cyan,
+                    Colors.indigo,
+                    Colors.deepPurple
+                  ],
                   begin: const FractionalOffset(0.0, 0.0),
                   end: const FractionalOffset(1.0, 0.0),
-                  stops: [0.0, 0.2,0.7, 1.0],
+                  stops: [0.0, 0.2, 0.7, 1.0],
                   tileMode: TileMode.clamp)),
           child: Icon(Icons.add),
         ),
         tooltip: 'Add post',
-
         onPressed: () {
           showDialogForAddingData();
         },

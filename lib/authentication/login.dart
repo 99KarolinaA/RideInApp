@@ -27,7 +27,6 @@ class _LoginState extends State<Login> {
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
 
-    // todo: change padding and image and iconData
     return new SingleChildScrollView(
         child:
           Container(

@@ -31,9 +31,7 @@ class CustomTextField extends StatelessWidget {
     } catch (e) {
       _width = _width * 0.5;
     }
-    //todo: change colors
     return Container(
-      //todo: change maybe width?
       width: _width,
       decoration: BoxDecoration(
         color: Colors.white,

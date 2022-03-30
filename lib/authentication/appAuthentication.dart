@@ -20,7 +20,6 @@ class _AppAuthenticationState extends State<AppAuthentication> {
           flexibleSpace: Container(
             decoration: new BoxDecoration(
                 gradient: new LinearGradient(
-                    // todo: change the colors
                     colors: [Colors.cyanAccent, Colors.cyan, Colors.indigo, Colors.deepPurple],
                     begin: const FractionalOffset(0.0, 0.0),
                     end: const FractionalOffset(1.0, 0.0),
@@ -35,7 +34,6 @@ class _AppAuthenticationState extends State<AppAuthentication> {
           centerTitle: true,
           bottom: TabBar(
             tabs: [
-              // todo: change the color of the tab text
               Tab(icon: Icon(Icons.lock, color: Colors.white), text: "Login"),
               Tab(
                   icon: Icon(Icons.person, color: Colors.white),
@@ -50,7 +48,7 @@ class _AppAuthenticationState extends State<AppAuthentication> {
             child: Stack(children: <Widget>[
               Positioned.fill(  //
                 child: Image(
-                  image: AssetImage('../../images/background_lights.jpg'),
+                  image: AssetImage('images/background_lights.jpg'),
                   fit : BoxFit.fill,
                 ),
               ),

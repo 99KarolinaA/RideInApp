@@ -110,7 +110,7 @@ class _SearchCarState extends State<SearchCar> {
     FirebaseFirestore.instance
         .collection('cars')
         .where("carModel",
-            isGreaterThanOrEqualTo: _searchQueryController.text.trim())
+            isEqualTo: _searchQueryController.text.trim())
         .get()
         .then((results) {
       setState(() {
