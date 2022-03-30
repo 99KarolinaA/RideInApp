@@ -6,6 +6,8 @@ import 'package:icar/profilePage.dart';
 import 'package:icar/searchCar.dart';
 import 'package:timeago/timeago.dart' as tAgo;
 import 'dart:io' show Platform;
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 import 'authentication/appAuthentication.dart';
 import 'functions.dart';
@@ -31,6 +33,44 @@ class _HomepageState extends State<Homepage> {
   QuerySnapshot cars;
 
   carMethods carObject = new carMethods();
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  Future<void> GetAddressFromLatLong(Position position) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    this.carLocation =
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+  }
 
   Future<bool> showDialogForAddingData() async {
     return showDialog(
@@ -108,6 +148,12 @@ class _HomepageState extends State<Homepage> {
             ),
             actions: [
               ElevatedButton(
+                  onPressed: () async {
+                    Position position = await _determinePosition();
+                    GetAddressFromLatLong(position);
+                  },
+                  child: Text('Current location')),
+              ElevatedButton(
                 child: Text(
                   "Cancel",
                 ),
@@ -117,7 +163,7 @@ class _HomepageState extends State<Homepage> {
               ),
               ElevatedButton(
                 child: Text(
-                  "Add now",
+                  "Add",
                 ),
                 onPressed: () {
                   Map<String, dynamic> carData = {
@@ -247,11 +293,12 @@ class _HomepageState extends State<Homepage> {
                     'urlImage': this.urlImage,
                     'time': DateTime.now(),
                   };
-                  carObject.updateData(selectedDoc, carData).then((value){
+                  carObject.updateData(selectedDoc, carData).then((value) {
                     print("Data updated successfully.");
-                    Route route = MaterialPageRoute(builder: (BuildContext c) => Homepage());
+                    Route route = MaterialPageRoute(
+                        builder: (BuildContext c) => Homepage());
                     Navigator.push(context, route);
-                  }).catchError((onError){
+                  }).catchError((onError) {
                     print(onError);
                   });
                 },
@@ -261,7 +308,7 @@ class _HomepageState extends State<Homepage> {
         });
   }
 
-  getMyData() async{
+  getMyData() async {
     await Firebase.initializeApp();
     FirebaseFirestore.instance
         .collection('users')
@@ -294,6 +341,25 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    bool centertitle = true;
+    try {
+      if (Platform.isAndroid || Platform.isIOS) {
+        width = width;
+      } else {
+        width = width * 0.5;
+      }
+    } catch (e) {
+      width = width;
+    }
+    try {
+      if (Platform.isAndroid || Platform.isIOS) {
+        centertitle = false;
+      } else {
+        centertitle = true;
+      }
+    } catch (e) {
+      centertitle = true;
+    }
 
     // todo: change the listing of the cars
     Widget showCarsList() {
@@ -309,7 +375,10 @@ class _HomepageState extends State<Homepage> {
                     ListTile(
                       leading: GestureDetector(
                         onTap: () {
-                          Route route = MaterialPageRoute(builder: (_)=>ProfilePage(sellerId: cars.docs[i].data()['uId'],));
+                          Route route = MaterialPageRoute(
+                              builder: (_) => ProfilePage(
+                                    sellerId: cars.docs[i].data()['uId'],
+                                  ));
                           Navigator.pushReplacement(context, route);
                         },
                         child: Container(
@@ -327,13 +396,19 @@ class _HomepageState extends State<Homepage> {
                       ),
                       title: GestureDetector(
                           onTap: () {
-                            Route route = MaterialPageRoute(builder: (_)=>ProfilePage(sellerId: cars.docs[i].data()['uId'],));
+                            Route route = MaterialPageRoute(
+                                builder: (_) => ProfilePage(
+                                      sellerId: cars.docs[i].data()['uId'],
+                                    ));
                             Navigator.pushReplacement(context, route);
                           },
                           child: Text(cars.docs[i].data()['userName'])),
                       subtitle: GestureDetector(
                         onTap: () {
-                          Route route = MaterialPageRoute(builder: (_)=>ProfilePage(sellerId: cars.docs[i].data()['uId'],));
+                          Route route = MaterialPageRoute(
+                              builder: (_) => ProfilePage(
+                                    sellerId: cars.docs[i].data()['uId'],
+                                  ));
                           Navigator.pushReplacement(context, route);
                         },
                         child: Row(
@@ -376,9 +451,12 @@ class _HomepageState extends State<Homepage> {
                                 ),
                                 GestureDetector(
                                     onDoubleTap: () {
-                                      if(cars.docs[i].data()['uId'] == userId){
+                                      if (cars.docs[i].data()['uId'] ==
+                                          userId) {
                                         carObject.deleteData(cars.docs[i].id);
-                                        Route route = MaterialPageRoute(builder: (BuildContext c) => Homepage());
+                                        Route route = MaterialPageRoute(
+                                            builder: (BuildContext c) =>
+                                                Homepage());
                                         Navigator.push(context, route);
                                       }
                                     },
@@ -513,7 +591,10 @@ class _HomepageState extends State<Homepage> {
         actions: <Widget>[
           TextButton(
               onPressed: () {
-                Route route = MaterialPageRoute(builder: (_) => ProfilePage(sellerId: userId,));
+                Route route = MaterialPageRoute(
+                    builder: (_) => ProfilePage(
+                          sellerId: userId,
+                        ));
                 Navigator.pushReplacement(context, route);
               },
               child: Padding(
@@ -553,11 +634,11 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
         title: Text(("Home page")),
-        centerTitle: Platform.isAndroid || Platform.isIOS ? false : true,
+        centerTitle: centertitle,
       ),
       body: Center(
           child: Container(
-        width: Platform.isAndroid || Platform.isIOS ? width: width * 0.5,
+        width: width,
         child: showCarsList(),
       )),
       floatingActionButton: FloatingActionButton(

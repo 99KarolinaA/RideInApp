@@ -55,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(height: 5.0),
                 TextField(
                   decoration:
-                  InputDecoration(hintText: 'Enter your phone number'),
+                      InputDecoration(hintText: 'Enter your phone number'),
                   onChanged: (value) {
                     this.userNumber = value;
                   },
@@ -91,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(height: 5.0),
                 TextField(
                   decoration:
-                  InputDecoration(hintText: 'Enter car description'),
+                      InputDecoration(hintText: 'Enter car description'),
                   onChanged: (value) {
                     this.description = value;
                   },
@@ -132,11 +132,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     'urlImage': this.urlImage,
                     'time': DateTime.now(),
                   };
-                  carObject.updateData(selectedDoc, carData).then((value){
+                  carObject.updateData(selectedDoc, carData).then((value) {
                     print("Data updated successfully.");
-                    Route route = MaterialPageRoute(builder: (BuildContext c) => Homepage());
+                    Route route = MaterialPageRoute(
+                        builder: (BuildContext c) => Homepage());
                     Navigator.push(context, route);
-                  }).catchError((onError){
+                  }).catchError((onError) {
                     print(onError);
                   });
                 },
@@ -145,6 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
           );
         });
   }
+
   Widget _buildBackButton() {
     return IconButton(
       onPressed: () {
@@ -170,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  getResults() async{
+  getResults() async {
     await Firebase.initializeApp();
     FirebaseFirestore.instance
         .collection('cars')
@@ -184,6 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     });
   }
+
   Widget showCarsList() {
     if (cars != null) {
       return ListView.builder(
@@ -197,7 +200,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ListTile(
                     leading: GestureDetector(
                       onTap: () {
-                        Route route = MaterialPageRoute(builder: (_)=>ProfilePage(sellerId: cars.docs[i].data()['uId'],));
+                        Route route = MaterialPageRoute(
+                            builder: (_) => ProfilePage(
+                                  sellerId: cars.docs[i].data()['uId'],
+                                ));
                         Navigator.pushReplacement(context, route);
                       },
                       child: Container(
@@ -215,13 +221,19 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     title: GestureDetector(
                         onTap: () {
-                          Route route = MaterialPageRoute(builder: (_)=>ProfilePage(sellerId: cars.docs[i].data()['uId'],));
+                          Route route = MaterialPageRoute(
+                              builder: (_) => ProfilePage(
+                                    sellerId: cars.docs[i].data()['uId'],
+                                  ));
                           Navigator.pushReplacement(context, route);
                         },
                         child: Text(cars.docs[i].data()['userName'])),
                     subtitle: GestureDetector(
                       onTap: () {
-                        Route route = MaterialPageRoute(builder: (_)=>ProfilePage(sellerId: cars.docs[i].data()['uId'],));
+                        Route route = MaterialPageRoute(
+                            builder: (_) => ProfilePage(
+                                  sellerId: cars.docs[i].data()['uId'],
+                                ));
                         Navigator.pushReplacement(context, route);
                       },
                       child: Row(
@@ -247,32 +259,34 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     trailing: cars.docs[i].data()['uId'] == userId
                         ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (cars.docs[i].data()['uId'] == userId) {
-                              showDialogForUpdateData(cars.docs[i].id);
-                            }
-                          },
-                          child: Icon(
-                            Icons.edit_outlined,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        GestureDetector(
-                            onDoubleTap: () {
-                              if(cars.docs[i].data()['uId'] == userId){
-                                carObject.deleteData(cars.docs[i].id);
-                                Route route = MaterialPageRoute(builder: (BuildContext c) => Homepage());
-                                Navigator.push(context, route);
-                              }
-                            },
-                            child: Icon(Icons.delete_forever_sharp)),
-                      ],
-                    )
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  if (cars.docs[i].data()['uId'] == userId) {
+                                    showDialogForUpdateData(cars.docs[i].id);
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.edit_outlined,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              GestureDetector(
+                                  onDoubleTap: () {
+                                    if (cars.docs[i].data()['uId'] == userId) {
+                                      carObject.deleteData(cars.docs[i].id);
+                                      Route route = MaterialPageRoute(
+                                          builder: (BuildContext c) =>
+                                              Homepage());
+                                      Navigator.push(context, route);
+                                    }
+                                  },
+                                  child: Icon(Icons.delete_forever_sharp)),
+                            ],
+                          )
                         : Row(mainAxisSize: MainAxisSize.min, children: []),
                   ),
                   Padding(
@@ -354,8 +368,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               padding: const EdgeInsets.only(left: 10.0),
                               child: Align(
                                 //child: Text(cars.docs[i].data()['time'].toString()),
-                                child:
-                                Text(cars.docs[i].data()['userNumber']),
+                                child: Text(cars.docs[i].data()['userNumber']),
                                 alignment: Alignment.topRight,
                               ),
                             ),
@@ -389,7 +402,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -399,6 +411,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     double _screenWidth = MediaQuery.of(context).size.width;
+    try {
+      if (Platform.isAndroid || Platform.isIOS) {
+        _screenWidth = _screenWidth;
+      } else {
+        _screenWidth = _screenWidth * 0.5;
+      }
+    } catch (e) {
+      _screenWidth = _screenWidth * 0.5;
+    }
     return Scaffold(
       appBar: AppBar(
         leading: _buildBackButton(),
@@ -427,9 +448,9 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Center(
           child: Container(
-            width: Platform.isAndroid || Platform.isIOS ? _screenWidth: _screenWidth * 0.5,
-            child: showCarsList(),
-          )),
+        width: _screenWidth,
+        child: showCarsList(),
+      )),
     );
   }
 }

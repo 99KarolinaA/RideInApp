@@ -124,7 +124,15 @@ class _SearchCarState extends State<SearchCar> {
   @override
   Widget build(BuildContext context) {
     double _screenWidth = MediaQuery.of(context).size.width;
-
+    try {
+      if (Platform.isAndroid || Platform.isIOS) {
+        _screenWidth = _screenWidth;
+      } else {
+        _screenWidth = _screenWidth * 0.5;
+      }
+    } catch (e) {
+      _screenWidth = _screenWidth * 0.5;
+    }
     Widget showCarsList() {
       if (cars != null) {
         return ListView.builder(
@@ -331,9 +339,7 @@ class _SearchCarState extends State<SearchCar> {
       ),
       body: Center(
           child: Container(
-        width: Platform.isAndroid || Platform.isIOS
-            ? _screenWidth
-            : _screenWidth * 0.5,
+        width: _screenWidth,
         child: showCarsList(),
       )),
     );

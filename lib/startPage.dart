@@ -18,17 +18,14 @@ class _StartPageState extends State<StartPage> {
   startTimer() {
     Timer(Duration(seconds: 3), () async {
       await Firebase.initializeApp();
-      if(FirebaseAuth.instance.currentUser!=null){
+      if (FirebaseAuth.instance.currentUser != null) {
+        Route route = MaterialPageRoute(builder: (context) => Homepage());
+        Navigator.pushReplacement(context, route);
+      } else {
         Route route =
-        MaterialPageRoute(builder: (context) => Homepage());
+            MaterialPageRoute(builder: (context) => AppAuthentication());
         Navigator.pushReplacement(context, route);
       }
-      else {
-        Route route =
-        MaterialPageRoute(builder: (context) => AppAuthentication());
-        Navigator.pushReplacement(context, route);
-      }
-
     });
   }
 
@@ -37,9 +34,20 @@ class _StartPageState extends State<StartPage> {
     super.initState();
     startTimer();
   }
- //todo: below
+
+  //todo: below
   @override
   Widget build(BuildContext context) {
+    double fontSize;
+    try {
+      if (Platform.isAndroid || Platform.isIOS) {
+        fontSize = 20.0;
+      } else {
+        fontSize = 60.0;
+      }
+    } catch (e) {
+      fontSize = 60.0;
+    }
     return Material(
         child: Container(
             decoration: new BoxDecoration(
@@ -64,8 +72,7 @@ class _StartPageState extends State<StartPage> {
                 ),
                 Text("Ride in and enjoy",
                     style: TextStyle(
-                        fontSize: Platform.isAndroid || Platform.isIOS?
-                        20.0: 60.0,
+                        fontSize: fontSize,
                         color: Colors.white,
                         fontFamily: "Lobster"))
               ],

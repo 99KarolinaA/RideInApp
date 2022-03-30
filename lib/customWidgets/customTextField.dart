@@ -19,11 +19,19 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
-
+    try {
+      if (Platform.isAndroid || Platform.isIOS) {
+        _width = _width;
+      } else {
+        _width = _width * 0.5;
+      }
+    } catch (e) {
+      _width = _width * 0.5;
+    }
     //todo: change colors
     return Container(
       //todo: change maybe width?
-      width: Platform.isAndroid || Platform.isIOS ? _width : _width * 0.5,
+      width: _width,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
