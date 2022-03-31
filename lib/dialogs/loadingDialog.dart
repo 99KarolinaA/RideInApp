@@ -17,7 +17,6 @@ class LoadingDialog extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          //todo: already changed text
           Text('Please wait for the authenticating to be completed...')
         ],
       ),

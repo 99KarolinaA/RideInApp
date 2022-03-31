@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:icar/customWidgets/camera.dart';
 import 'package:icar/startPage.dart';
 import '../Dialogs/errorDialog.dart';
 import '../customWidgets/customTextField.dart';
-import '../homePage.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,108 +30,136 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
-    // todo: change padding and image and iconData
+
     return new SingleChildScrollView(
-        child:
-          Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Container(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      Form(
-                        key: globalKey,
-                        child: Column(
-                          children: <Widget>[
-                            Container(height: _height * 0.1,
-                            child: CustomTextField(
-                              iconData: Icons.person,
-                              textEditingController: nameController,
-                              hint: 'Name',
-                              isObscure: false,
-                            ),),
-                        Container(height: _height * 0.1,
-                        child: CustomTextField(
-                          iconData: Icons.phone_android_rounded,
-                          textEditingController: phoneConfirmController,
-                          hint: 'Phone',
-                          isObscure: false,
-                        ),),
-                        Container(height: _height * 0.1,
-                          child: CustomTextField(
-                            iconData: Icons.email,
-                            textEditingController: emailController,
-                            hint: 'Email',
-                            isObscure: false,
-                          ),),
-                        Container(height: _height * 0.1,
-                          child:  CustomTextField(
-                            iconData: Icons.camera_alt_outlined,
-                            textEditingController: imageController,
-                            hint: 'Image Url',
-                            isObscure: false,
-                          ),),
-                        Container(height: _height * 0.1,
-                          child: CustomTextField(
-                            iconData: Icons.lock,
-                            textEditingController: passwordController,
-                            hint: 'Password',
-                            isObscure: true,
-                          ),),
-                        Container(height: _height * 0.1,
-                          child: CustomTextField(
-                            iconData: Icons.lock,
-                            textEditingController: passwordConfirmController,
-                            hint: 'Confirm passsword',
-                            isObscure: true,
-                          ),)
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _register();
-                          },
-                          child: Container(
-                              padding: new EdgeInsets.all(15.0),
-                              child: Text(
-                                'Sign up',
-                                style: TextStyle(color: Colors.white),
-                              ),)
-
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                    ],
+        child: Container(
+            child: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
+      Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            SizedBox(
+              height: 10.0,
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+              ),
+            ),
+            SizedBox(
+              height: 8.0,
+            ),
+            Form(
+              key: globalKey,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: _height * 0.1,
+                    child: CustomTextField(
+                      iconData: Icons.person,
+                      textEditingController: nameController,
+                      hint: 'Name',
+                      isObscure: false,
+                    ),
                   ),
-                ),
-                 ])));
+                  Container(
+                    height: _height * 0.1,
+                    child: CustomTextField(
+                      iconData: Icons.phone_android_rounded,
+                      textEditingController: phoneConfirmController,
+                      hint: 'Phone',
+                      isObscure: false,
+                    ),
+                  ),
+                  Container(
+                    height: _height * 0.1,
+                    child: CustomTextField(
+                      iconData: Icons.email,
+                      textEditingController: emailController,
+                      hint: 'Email',
+                      isObscure: false,
+                    ),
+                  ),
+                  Container(
+                    height: _height * 0.1,
+                    child: CustomTextField(
+                      iconData: Icons.camera_alt_outlined,
+                      textEditingController: imageController,
+                      hint: 'Image Url',
+                      isObscure: false,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          // TODO: comment for web functionality
+                          Route route =
+                          MaterialPageRoute(builder: (context) => Camera());
+                          Navigator.pushReplacement(context, route);
+                        },
+                        child: Container(
+                          padding: new EdgeInsets.all(15.0),
+                          child: Text(
+                            'Take a photo',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    height: _height * 0.1,
+                    child: CustomTextField(
+                      iconData: Icons.lock,
+                      textEditingController: passwordController,
+                      hint: 'Password',
+                      isObscure: true,
+                    ),
+                  ),
+                  Container(
+                    height: _height * 0.1,
+                    child: CustomTextField(
+                      iconData: Icons.lock,
+                      textEditingController: passwordConfirmController,
+                      hint: ''
+                          'Confirm passsword',
+                      isObscure: true,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: ElevatedButton(
+                  onPressed: () {
+                    _register();
+                  },
+                  child: Container(
+                    padding: new EdgeInsets.all(15.0),
+                    child: Text(
+                      'Sign up',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
+      ),
+    ])));
   }
 
-  void saveUserData() async{
-    Map<String, dynamic> userData={
+  void saveUserData() async {
+    Map<String, dynamic> userData = {
       'userName': nameController.text.trim(),
       'uId': userId,
       'userNumber': phoneConfirmController.text.trim(),
@@ -141,7 +169,6 @@ class _RegisterState extends State<Register> {
 
     await Firebase.initializeApp();
     FirebaseFirestore.instance.collection('users').doc(userId).set(userData);
-
   }
 
   void _register() async {
@@ -174,4 +201,5 @@ class _RegisterState extends State<Register> {
       Navigator.pushReplacement(context, route);
     }
   }
+
 }

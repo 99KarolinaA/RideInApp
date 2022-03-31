@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// todo: change colors and padding
 circularProgress() {
   return Container(
       alignment: Alignment.center,

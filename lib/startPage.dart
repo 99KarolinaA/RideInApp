@@ -39,23 +39,22 @@ class _StartPageState extends State<StartPage> {
   //todo: below
   @override
   Widget build(BuildContext context) {
-    double fontSize;
+/*    double fonttmp = 60.0;
     try {
       if (Platform.isAndroid || Platform.isIOS) {
-        fontSize = 20.0;
+        fonttmp = 20.0;
       } else {
-        fontSize = 60.0;
+        fonttmp = 60.0;
       }
     } catch (e) {
-      fontSize = 60.0;
-    }
+      fonttmp = 60.0;
+    }*/
     return new Stack(
       children: <Widget>[
-        // todo: change the logo and the text
         Positioned.fill(
           //
           child: Image(
-            image: AssetImage('../../images/background_lights.jpg'),
+            image: AssetImage('images/background_lights.jpg'),
             fit: BoxFit.fill,
           ),
         ),
@@ -68,7 +67,8 @@ class _StartPageState extends State<StartPage> {
                 GradientText(
                   'Ride in and enjoy',
                   style: const TextStyle(
-                    fontSize: 60,
+
+                    fontSize: 30.0,
                     fontFamily: "Lobster",
                   ),
                   gradient: LinearGradient(colors: [
