@@ -326,13 +326,10 @@ class _SearchCarState extends State<SearchCar> {
         flexibleSpace: Container(
           decoration: new BoxDecoration(
             gradient: new LinearGradient(
-                colors: [
-                  Colors.blueAccent,
-                  Colors.redAccent,
-                ],
+                colors: [Colors.cyanAccent, Colors.cyan, Colors.indigo, Colors.deepPurple],
                 begin: const FractionalOffset(0.0, 0.0),
                 end: const FractionalOffset(1.0, 0.0),
-                stops: [0.0, 1.0],
+                stops: [0.0, 0.2,0.7, 1.0],
                 tileMode: TileMode.clamp),
           ),
         ),

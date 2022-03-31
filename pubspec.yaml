@@ -36,6 +36,7 @@ dependencies:
   geolocator: ^8.0.0 #latest version
   geocoding: ^2.0.1 #latest version
   rxdart:
+  get_it: ^7.2.0
 
 dev_dependencies:
   flutter_test:

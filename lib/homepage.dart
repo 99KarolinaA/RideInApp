@@ -8,6 +8,7 @@ import 'package:timeago/timeago.dart' as tAgo;
 import 'dart:io' show Platform;
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:get_it/get_it.dart';
 
 import 'authentication/appAuthentication.dart';
 import 'functions.dart';
@@ -31,7 +32,7 @@ class _HomepageState extends State<Homepage> {
   String carLocation;
   QuerySnapshot cars;
 
-  carMethods carObject = new carMethods();
+  carMethods carObject = GetIt.instance.get<carMethods>();
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -627,11 +628,11 @@ class _HomepageState extends State<Homepage> {
         flexibleSpace: Container(
           decoration: new BoxDecoration(
             gradient: new LinearGradient(
-                colors: [Colors.black54, Colors.teal],
+                colors: [Colors.cyanAccent, Colors.cyan, Colors.indigo, Colors.deepPurple],
                 begin: const FractionalOffset(0.0, 0.0),
                 end: const FractionalOffset(1.0, 0.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp),
+                stops: [0.0, 0.2,0.7, 1.0],
+                tileMode: TileMode.clamp) ,
           ),
         ),
         title: Text(("Home page")),

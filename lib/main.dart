@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:icar/serviceLocator.dart';
 import 'package:icar/startPage.dart';
 
 void main() {
+  setup();
   runApp(MyApp());
 }
 

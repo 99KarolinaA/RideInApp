@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:icar/homepage.dart';
 import 'package:timeago/timeago.dart' as tAgo;
 import 'dart:io' show Platform;
@@ -30,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String urlImage;
   QuerySnapshot cars;
 
-  carMethods carObject = new carMethods();
+  carMethods carObject = GetIt.instance.get<carMethods>();
 
   Future<bool> showDialogForUpdateData(selectedDoc) async {
     return showDialog(
@@ -435,13 +436,10 @@ class _ProfilePageState extends State<ProfilePage> {
         flexibleSpace: Container(
           decoration: new BoxDecoration(
             gradient: new LinearGradient(
-                colors: [
-                  Colors.blueAccent,
-                  Colors.redAccent,
-                ],
+                colors: [Colors.cyanAccent, Colors.cyan, Colors.indigo, Colors.deepPurple],
                 begin: const FractionalOffset(0.0, 0.0),
                 end: const FractionalOffset(1.0, 0.0),
-                stops: [0.0, 1.0],
+                stops: [0.0, 0.2,0.7, 1.0],
                 tileMode: TileMode.clamp),
           ),
         ),
